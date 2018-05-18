@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ShudongApplication {
+public class YueTingApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ShudongApplication.class, args);
+		SpringApplication.run(YueTingApplication.class, args);
 	}
 }

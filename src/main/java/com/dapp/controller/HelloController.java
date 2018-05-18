@@ -90,6 +90,8 @@ public class HelloController {
       }
    }
 
+   @RequestMapping("/")
+
    public class Message {
 
        public String userId;
