@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="author" content="wenxueliu">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-touch-fullscreen" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="full-screen" content="yes"><!--UC强制全屏-->
+<meta name="browsermode" content="application"><!--UC应用模式-->
+<meta name="x5-fullscreen" content="true"><!--QQ强制全屏-->
+<meta name="x5-page-mode" content="app"><!--QQ应用模式-->
+<meta name="description" content="数字资产，Dapp">
+<meta name="keywords" content="数字资产, Dapp">
+
+<body>
+    <p> hello </p>
+
+<script src="yueting_plus.js" >
+</script>
+
+<script>
+
+/*
+function Set() {
+    this.values = {}//集合数据保存对象的属性值
+    this.length = 0 //集合中值的个数
+    this.add.apply(this, arguments)//把所有的参数添加到集合
+}
+
+Set.prototype.add = function () {
+    for (var i = 0, len = arguments.length; i < len; i++) {
+        var val = arguments[i]
+        var str = Set._valToStr(val)//转换为字符串
+        if (!this.values.hasOwnProperty(str)) { //如果不在集合中,将字符串和值对应起来,集合中的长度+1
+            this.values[str] = val
+            this.length++
+        }
+    }
+}
+
+Set.prototype.get = function (index) {
+    if (isNaN(parseFloat(index)) || !isFinite(index) || index >= this.length)  {
+        return undefined
+    }
+    for (var s in this.values) { //集合中所有的字符串
+        if (this.values.hasOwnProperty(s)) {
+            if (index == 0) {
+                return this.values[s]
+            }
+            index--
+        }
+    }
+    return this//支持链式调用
+}
+
+
+//集合中删除元素
+Set.prototype.remove = function () {
+    for (var i = 0, len = arguments.length; i < len; i++) {
+        var str = Set._valToStr(arguments[i])
+        if (this.values.hasOwnProperty(str)) {
+            delete this.values[str]
+            this.length--
+        }
+    }
+    return this//返回this为了支持链式调用
+}
+
+//是否包含某个值
+Set.prototype.contains = function (value) {
+    return this.values.hasOwnProperty(Set._valToStr(value))
+}
+
+//返回集合的长度
+Set.prototype.size = function () {
+    return this.length
+}
+
+//在指定的上下文遍历集合中的所有元素
+Set.prototype.foreach = function (f, context) {
+    for (var s in this.values) { //集合中所有的字符串
+        if (this.values.hasOwnProperty(s)) { //去掉继承而来的属性
+            f.call(context, this.values[s])
+        }
+    }
+}
+
+Set.prototype.toString = function () {
+    var ret = "["
+    len = this.size()
+    for (var i = 0; i < len - 1; i++) {
+        ret += this.get(i) + ","
+    }
+    ret += this.get(len-1) + "]"
+    return ret
+}
+
+//比较两个Set是否相等
+Set.prototype.equals = function (that) {
+    if (this == that) {
+         return true
+    }
+    //如果that 对象不是一个集合,它和this不相等,使用instanceof 使这个方法可以应用于Set的任何子类
+    //注意null和undefined两个值是无法用于instanceof 运算的
+    if (!(that instanceof Set))  {
+        return false
+    }
+    if (this.size() != that.size())  {
+        return false
+    }
+    try {
+        //this.foreach(function (v) { if (!(that.contains(v))) throw false })
+        this.foreach(function (v) { if (!(that.contains(v))) return false })
+    } catch (e) {
+        if (e === false)  {
+            return false
+        }
+        throw e
+    }
+}
+
+//私有函数(通常使用_开始),用来将任意js的值和字符串对应
+Set._valToStr = function (value) {
+    switch (value) {
+        case undefined:
+            return "undefined"
+        case null:
+            return "null"
+        case true:
+            return "true"
+        case false:
+            return "false"
+        default:
+            switch (typeof value) {
+                case "number": //数字带有number前缀
+                    return "number" + value
+                case "string"://字符串带有string前缀
+                    return "string" + value
+                default:
+                    return "@" + objectId(value)
+        }
+    }
+    //对任意对象,都返回一个字符串,针对不同的对象,此函数返回不同的字符串,对于同一个对象多次调用,总是返回相同的字符串
+    //为了做到这一点,给对象o创建一个属性,在ES5中这个属性不可枚举且是只读的
+    function objectId(o) {
+        var prop = "|objectid|"//私有属性,存放id
+        if (!o.hasOwnProperty(prop)) {
+            o[prop] = Set._valToStr.next++
+        }
+        return o[prop]
+    }
+}
+
+Set._valToStr.next = 0//初始化id的值
+
+//TODO 解析抛出异常,处理
+//such as '{"userId":"12334", "musicId": "1123xxxs", "provider":"tencent"}'
+var Music = function(text) {
+	if (text) {
+		var obj = JSON.parse(text)
+		//目前 userId 就是钱包地址
+		this.userId = obj.userId
+		this.musicId = obj.musicId
+		this.provider = obj.provider
+		this.name = obj.name
+	}
+}
+
+
+Music.prototype = {
+	toString: function () {
+		return JSON.stringify(this)
+	}
+}
+
+var YueTing = function () {
+    this.musics = new mymap()
+    this.allMusics = new mymap()
+    this.likes = new mymap()
+    this.users = new mymap()
+    this.allMusics.put("musics", new Set())
+}
+
+YueTing.prototype = {
+    init: function () {
+    },
+
+    isExist: function(key) {
+        user = this.users.get(key)
+        if (user) {
+            return true
+        } else {
+            return false
+        }
+    },
+
+    //增加用户
+    createUser: function(userId) {
+        key = userId.trim()
+        if (key == "") {
+            throw new Error("empty key / value")
+        }
+
+        if (this.isExist(key)) {
+            throw new Error("user has exists")
+        }
+        this.users.put(key, "user")
+
+        //这样添加音乐的时候直接添加即可
+        this.musics.put(key, new Set())
+
+        //这样点赞的时候直接添加即可
+        this.likes.put(key, new Set())
+
+        //this.allMusics.put("musics", allMusics)
+        //this.musics.put(key, myMusics)
+    },
+
+    getUsers: function() {
+        return this.users.keySet()
+    },
+
+    //获取用户信息
+    getUser: function(userId) {
+        key = userId.trim()
+        if (key === "") {
+            throw new Error("empty key")
+        }
+        return '{ "musics": ' + this.musics.get(key) + ', "likes":' + this.likes.get(key) + "}"
+    },
+
+    getMusics: function(userId) {
+        return this.musics.get(userId)
+    },
+
+    //用户添加音乐, 同时添加到用户和全局音乐表中
+    addMusic: function(userId, value) {
+        key = userId.trim()
+        value = value.trim()
+        if (key === "" || value === ""){
+            throw new Error("empty key / value")
+        }
+
+        if (!this.isExist(key)) {
+            throw new Error("add music to " + key + " but user doesn't exist")
+        }
+
+        var music = new Music(value)
+
+        var myMusics = this.musics.get(key)
+        myMusics.add(music.toString())
+
+        var ms = this.allMusics.get("musics")
+        ms.add(music.toString())
+
+        //this.musics.put(key, myMusics)
+        //this.allMusics.put("musics", allMusics)
+    },
+
+    getLikes: function (userId) {
+        key = userId.trim()
+        if (key === "") {
+            throw new Error("empty key")
+        }
+        return this.likes.get(key)
+    },
+
+    add_like: function (userId, value) {
+        key = userId.trim()
+        value = value.trim()
+        if (key === "" || value === ""){
+            throw new Error("empty key / value")
+        }
+
+        if (!this.isExist(key)) {
+            throw new Error("add like to " + key + " but user doesn't exist")
+        }
+
+        var music = new Music(value)
+
+        var myLikes = this.likes.get(key)
+        //这里由于是 set 不需要检查重复添加问题
+        myLikes.add(music.toString())
+
+        //this.likes.put(key, myLikes)
+    }
+}
+*/
+
+/*********************************
+         test
+**********************************/
+
+//test Set
+
+var m = new Music('{"userId":"12334", "musicId": "1123xxxs", "provider":"tencent"}')
+
+document.write("<br/> music <br/>" + m.toString())
+
+st = new Set()
+st.add(m)
+st.add(m)
+v = st.get(0)
+v = st.toString()
+document.write("<br/> set <br/>" + v)
+
+
+
+// test mymap
+mp = new mymap()
+mp.set("a","Tom")
+mp.set("b","Nick")
+//var keys = mp.keySet()
+//document.write("<br/> mymap test <br/>")
+//for(i in keys) {
+//    key = keys[i]
+//    document.write(" key:" + key + "  value:" + mp.get(key))
+//}
+document.write("<br/> mymap size : " + mp.size())
+
+mp1 = new mymap()
+mp1.set("c","3")
+mp1.set("d","4")
+mp1.set("a","4")
+mp1.set("a","5")
+//var keys = mp1.keySet()
+//document.write("<br/> mymap test <br/>")
+//for(i in keys) {
+//    key = keys[i]
+//    document.write(" key:" + key + "  value:" + mp1.get(key))
+//}
+document.write("<br/> mymap size : " + mp1.size())
+
+
+// test YueTing
+
+yt = new YueTing()
+
+yt.createUser("12334")
+yt.addMusic("12334", '{"userId":"12336", "musicId": "3333333", "provider":"dddddddd"}')
+yt.addMusic("12334", '{"userId":"12336", "musicId": "3333333", "provider":"dddddddd"}')
+yt.add_like("12334", '{"userId":"1", "musicId": "33", "provider":"cccccccc"}')
+yt.add_like("12334", '{"userId":"1", "musicId": "33", "provider":"cccccccc"}')
+yt.add_like("12334", '{"userId":"2", "musicId": "33", "provider":"cccccccc"}')
+
+yt.createUser("12335")
+yt.addMusic("12335", '{"userId":"1", "musicId": "3", "provider":"d"}')
+yt.add_like("12335", '{"userId":"12334", "musicId": "2222222", "provider":"dddddddd"}')
+yt.add_like("12335", '{"userId":"12334", "musicId": "2222222", "provider":"dddddddd"}')
+
+document.write("<br> yt test <br/>")
+document.write("<br/>12334 users<br/>" + yt.getUser("12334"))
+document.write("<br/>12334 musics<br/>" + yt.getMusics("12334"))
+document.write("<br/>12334 likes <br/>" + yt.getLikes("12334"))
+
+document.write("<br/>12335 users<br/>" + yt.getUser("12335"))
+document.write("<br/>12335 musics<br/>" + yt.getMusics("12335"))
+document.write("<br/>12335 likes<br/>" + yt.getLikes("12335"))
+
+document.write("<br/>all musics <br/>" + yt.getMusics("12335"))
+document.write("<br/>all musics <br/>" + yt.getUsers())
+
+</script>
+</body>
+</html>

@@ -8,13 +8,16 @@ public final class Music {
     //@Id
     private String id;
     private String title;
+    private String albumName;
     private String comment;
     private String singer;
     private int duration; //sec
+    private String pictureId;
     private String pictureURL;
     private String streamURL;
     private String songMid;
     private String mediaMid;
+    private String provider;
 
     //@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 
@@ -55,6 +58,15 @@ public final class Music {
         return this;
     }
 
+    public String getAlbumName() {
+        return albumName;
+    }
+
+    public Music setAlbumName(String albumName) {
+        this.albumName = albumName;
+        return this;
+    }
+
     public int getDuration() {
         return duration;
     }
@@ -73,12 +85,30 @@ public final class Music {
         return this;
     }
 
+    public String getProvider() {
+        return provider;
+    }
+
+    public Music setProvider(String provider) {
+        this.provider = provider;
+        return this;
+    }
+
     public String getComment() {
         return comment;
     }
 
     public Music setComment(String comment) {
         this.comment = comment;
+        return this;
+    }
+
+    public String getPictureId() {
+        return pictureId;
+    }
+
+    public Music setPictureId(String pictureId) {
+        this.pictureId = pictureId;
         return this;
     }
 

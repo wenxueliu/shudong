@@ -33,6 +33,9 @@ public class TencentServiceImpl implements IMusicService {
     private Music convertToMusic(String body) {
         JSONObject jsonObj = JSONObject.parseObject(body);
         JSONArray array = jsonObj.getJSONArray("data");
+        if (array.isEmpty()) {
+            return null;
+        }
         JSONObject data = array.getJSONObject(0);
 
         String name = data.getString("name");
@@ -41,8 +44,11 @@ public class TencentServiceImpl implements IMusicService {
         int duration = data.getInteger("interval");
 
         JSONArray singers = data.getJSONArray("singer");
-        JSONObject singer = singers.getJSONObject(0);
-        String singerName = singer.getString("name");
+        String singerName = "UnKnow";
+        if (!singers.isEmpty()) {
+            JSONObject singer = singers.getJSONObject(0);
+            singerName = singer.getString("name");
+        }
 
         JSONObject album = data.getJSONObject("album");
         String albumMid = album.getString("mid");
@@ -58,6 +64,7 @@ public class TencentServiceImpl implements IMusicService {
                 .setPictureURL(pictureIdToURL(albumMid));
         music.setMediaMid(mediaMid);
         music.setSongMid(songMid);
+        music.setPictureId(pictureId);
         music.setPictureURL(pictureIdToURL(pictureId));
         String streamURL = getStreamURL(songMid, mediaMid);
         music.setStreamURL(streamURL);
@@ -129,6 +136,7 @@ public class TencentServiceImpl implements IMusicService {
             JSONObject musicInfo = JSONObject.parseObject(obj.toString());
             String songid = musicInfo.getString("songid");
             String title = musicInfo.getString("songname");
+            String albumNmae = musicInfo.getString("albumname");
             String mediaMid = musicInfo.getString("media_mid");
             String songMid = musicInfo.getString("songmid");
             int duration = musicInfo.getInteger("interval");
@@ -136,10 +144,12 @@ public class TencentServiceImpl implements IMusicService {
             JSONObject singer = singers.getJSONObject(0);
             String singerName = singer.getString("name");
             Music music = new Music(songid, title , singerName, duration);
+            music.setAlbumName(albumNmae);
             music.setMediaMid(mediaMid);
             music.setSongMid(songMid);
 
             String pictureId = musicInfo.getString("albummid");
+            music.setPictureId(pictureId);
             music.setPictureURL(pictureIdToURL(pictureId));
 
             String streamURL = getStreamURL(songMid, mediaMid);
@@ -209,11 +219,14 @@ public class TencentServiceImpl implements IMusicService {
         }
         String body = response.body();
         logger.debug("stream URL {}", body);
-        //System.out.println("stream URL" + body);
+        System.out.println("stream URL" + body);
         if (body !=  null) {
             JSONObject jsonBody = JSON.parseObject(body);
             JSONObject data = jsonBody.getJSONObject("data");
             JSONArray items = data.getJSONArray("items");
+            if (items.isEmpty()) {
+                return null;
+            }
             JSONObject item = items.getJSONObject(0);
             String fileName = item.getString("filename");
             String vKey = item.getString("vkey");

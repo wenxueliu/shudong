@@ -23,9 +23,10 @@ import java.util.stream.Collectors;
 public class HelloController {
    @RequestMapping("/")
    public String home() {
-       return "searchPage";
+       return "yueting/index";
    }
 
+   /*
    @RequestMapping(value="postSearch", method= RequestMethod.POST)
    public String postSearch(HttpServletRequest request, RedirectAttributes redirectAttributes) {
        String search = request.getParameter("search");
@@ -117,4 +118,5 @@ public class HelloController {
          return this.date;
       }
    }
+   */
 }
