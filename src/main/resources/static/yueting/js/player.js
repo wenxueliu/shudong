@@ -1,12 +1,7 @@
-/**************************************************
- * MKOnlinePlayer v2.32
- * 播放器主功能模块
- * 编写：mengkun(http://mkblog.cn)
- * 时间：2017-9-15
- *************************************************/
-// 播放器功能配置
+// 全局配置
 var mkPlayer = {
     // api: "api.php", // api地址
+    //TODO 网站域名
     api: "http://192.168.1.101:8080/api/", // api地址
     loadcount: 20,  // 搜索结果一次加载多少条
     method: "POST",     // 数据传输方式(POST/GET)
@@ -18,21 +13,14 @@ var mkPlayer = {
     mdotshine: false,   // 是否开启[移动端]播放进度条的小点闪动效果[不支持IE](true/false)
     volume: 0.6,        // 默认音量值(0~1之间)
     version: "v0.01",    // 播放器当前版本号(仅供调试)
-    debug: true// 是否开启调试模式(true/false)
+    debug: false// 是否开启调试模式(true/false)
 };
 
-
-
-/*******************************************************
- * 以下内容是播放器核心文件，不建议进行修改，否则可能导致播放器无法正常使用!
- * 
- * 哈哈，吓唬你的！想改就改呗！不过建议修改之前先【备份】,要不然改坏了弄不好了。
- ******************************************************/
 
 // 存储全局变量
 //  rem.dislist  对应 musicList 的索引
 //  rem.playid
-//  rem.playlist 当前正在播放歌曲的播放的列表索引
+//  rem.playlist 当前正在播放歌曲的播放的列表索引，对应 musicList 的索引
 //  rem.wd  : 搜索索框输入
 //  rem.loadPage :
 //  rem.uid :
@@ -280,9 +268,7 @@ function play(music) {
 }
 
 
-// 我的要求并不高，保留这一句版权信息可好？
-// 保留了，你不会损失什么；而保留版权，是对作者最大的尊重。
-console.info('欢迎使用 MKOnlinePlayer!\n当前版本：'+mkPlayer.version+' \n作者：mengkun(http://mkblog.cn)\n歌曲来源于各大音乐平台\nGithub：https://github.com/mengkunsoft/MKOnlineMusicPlayer');
+console.info('前端部分参考 Github：https://github.com/mengkunsoft/MKOnlineMusicPlayer');
 
 // 音乐进度条拖动回调函数
 function mBcallback(newVal) {

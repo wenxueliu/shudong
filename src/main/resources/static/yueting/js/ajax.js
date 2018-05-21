@@ -1,8 +1,5 @@
 /**************************************************
- * MKOnlinePlayer v2.31
  * Ajax 后台数据交互请求模块
- * 编写：mengkun(http://mkblog.cn)
- * 时间：2017-9-13
  *************************************************/
 
 // ajax加载搜索结果
@@ -163,18 +160,17 @@ function ajaxPic(music, callback)
     }
     
     $.ajax({ 
-        type: mkPlayer.method, 
-        url: mkPlayer.api,
-        data: "types=pic&id=" + music.pic_id + "&source=" + music.source,
-        dataType : "jsonp",
+        type: 'GET', 
+        url: mkPlayer.api + "musics/" + music.id,
+        dataType : "json",
         success: function(jsonData){
             // 调试信息输出
             if(mkPlayer.debug) {
-                console.log("歌曲封面：" + jsonData.url);
+                console.log("歌曲封面：" + jsonData.pictureURL);
             }
             
-            if(jsonData.url !== "") {
-                music.pic = jsonData.url;    // 记录结果
+            if(jsonData.pictureURL !== "") {
+                music.pic = jsonData.pictureURL;    // 记录结果
             } else {
                 music.pic = "err";
             }
@@ -296,10 +292,9 @@ function ajaxLyric(music, callback) {
     if(!music.lyric_id) callback('');  // 没有歌词ID，直接返回
     
     $.ajax({
-        type: mkPlayer.method,
+        type: GET,
         url: mkPlayer.api,
-        data: "types=lyric&id=" + music.lyric_id + "&source=" + music.source,
-        dataType : "jsonp",
+        dataType : "json",
         success: function(jsonData){
             // 调试信息输出
             if (mkPlayer.debug) {
