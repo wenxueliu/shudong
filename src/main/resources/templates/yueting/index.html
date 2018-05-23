@@ -44,6 +44,13 @@
     
     <!-- layer弹窗插件样式文件 -->
     <link rel="stylesheet" href="/yueting/plugns/layer/skin/default/layer.css?v=3.0.2302" id="layuicss-skinlayercss">
+
+    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.structure.css">
+    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.structure.min.css">
+    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.theme.css">
+    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.theme.min.css">
 </head>
 <body>
 
@@ -54,7 +61,46 @@
     <div class="logo" title="Powered by Wenxueliu">
         ♫ 越听
     </div>
-</div>  <!--class="header"-->
+    <div id="sign-in-dialog-form" title="注册">
+      <p class="validateTips">所有的表单字段都是必填的。</p>
+      <form>
+      <fieldset>
+        <label for="name">名字</label>
+        <input type="text" placeholder="由数字字母下划线" name="name" id="name" class="text ui-widget-content ui-corner-all">
+        <!--
+        <label for="email">邮箱</label>
+        <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all">
+        -->
+        <label for="wallet">钱包地址</label>
+        <input type="wallet" placeholder="数字或字母" name="wallet" id="wallet" value="" class="text ui-widget-content ui-corner-all">
+      </fieldset>
+      </form>
+    </div>
+    
+    <div id="sign-up-dialog-form" title="登录">
+      <p class="validateTips">所有的表单字段都是必填的。</p>
+      <form>
+      <fieldset>
+        <label for="wallet">钱包地址</label>
+        <input type="wallet" placeholder="数字或字母" name="wallet" id="wallet" value="" class="text ui-widget-content ui-corner-all">
+      </fieldset>
+      </form>
+    </div>
+    
+    <div id="confirm-like" title="点赞">
+      <p class="validateTips">所有的表单字段都是必填的。</p>
+      <form>
+      <fieldset>
+        <label for="nas_num"> 点赞的 NAS 数量 </label>
+        <input type="nas_num" placeholder="0.001 NAS" name="nas_num" id="nas_num" value="0" class="text ui-widget-content ui-corner-all">
+      </fieldset>
+      </form>
+    </div>
+    
+    <button class="login-btn" id="sign-in"> 注册</button>
+    <button class="login-btn" id="sign-up"> 登录</button>
+    <!--<button class="btn-box" id="like">  点赞 </button> -->
+    </div>  <!--class="header"-->
 
 <!-- 中间主体区域 -->
 <div class="center">
@@ -148,6 +194,13 @@
 
 <!-- 背景模糊化插件 -->
 <script src="/yueting/js/background-blur.min.js"></script>
+
+<!--<script charset="UTF-8" src="/yueting/js/jquery/jquery.js" ></script> -->
+<script charset="UTF-8" src="/yueting/js/jquery-ui/jquery-ui.js" ></script>
+<script charset="UTF-8" src="/yueting/js/jquery-ui/jquery-ui.min.js" ></script>
+<script charset="UTF-8" src="/yueting/js/sign-in.js"></script>
+<script charset="UTF-8" src="/yueting/js/sign-up.js"></script>
+<script charset="UTF-8" src="/yueting/js/like.js"></script>
 
 <!-- 站长统计代码 -->
 <span style="display: none">

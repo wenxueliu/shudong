@@ -201,10 +201,10 @@ function ajaxPlayList(lid, id, callback){
     musicList[id].isloading = true; // 更新状态：列表加载中
     
     $.ajax({
-        type: mkPlayer.method, 
+        //TODO
+        type: 'GET', 
         url: mkPlayer.api, 
-        data: "types=playlist&id=" + lid,
-        dataType : "jsonp",
+        dataType : "json",
         complete: function(XMLHttpRequest, textStatus) {
             musicList[id].isloading = false;    // 列表已经加载完了
         },  // complete
@@ -322,10 +322,10 @@ function ajaxUserList(uid)
 {
     var tmpLoading = layer.msg('加载中...', {icon: 16,shade: 0.01});
     $.ajax({
-        type: mkPlayer.method,
+        //TODO
+        type: 'GET',
         url: mkPlayer.api,
-        data: "types=userlist&uid=" + uid,
-        dataType : "jsonp",
+        dataType : "json",
         complete: function(XMLHttpRequest, textStatus) {
             if(tmpLoading) layer.close(tmpLoading);    // 关闭加载中动画
         },  // complete

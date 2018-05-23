@@ -349,6 +349,16 @@ body {
 }
 
 /*列表中滑动出现的菜单*/
+.list-menu1 {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    overflow: hidden;
+    font-size: 0;
+    height: 36px;
+    margin-top: -18px;
+    float: right;
+}
 .list-menu {
     position: absolute;
     right: 10px;
@@ -405,10 +415,10 @@ body {
     background-position: -120px -40px;
 }
 .icon-like {
-    background-position: -80px -240px;
+    background-position: -80px -241px;
 }
 .icon-like:hover {
-    background-position: -120px -240px;
+    background-position: -120px -241px;
 }
 
 /* 分享弹窗中的链接框 */
