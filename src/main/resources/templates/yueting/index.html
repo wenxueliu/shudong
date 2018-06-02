@@ -24,7 +24,7 @@
     
     <!-- 不支持IE8及以下版本浏览器 -->
     <!--[if lte IE 8]>
-        <script>window.location.href="/yueting/plugns/killie/"</script>
+    <script>window.location.href="/yueting/plugns/killie/"</script>
     <![endif]--> 
     
     <!-- favicon图标 -->
@@ -211,7 +211,6 @@
             window.location.href="/";
         } else {
             var userId = playerReaddata("userId")["userId"]
-            console.log("userId == ", userId)
         }
     }
 
@@ -267,6 +266,15 @@
 <script src=yueting/js/nas/js/i18n.js data-depends=jquery.slim></script>
 <script src=yueting/js/nas/js/ui-block.js data-depends="bootbox blockies jquery.slim i18n.js nebulas.js"></script>
 <script src=yueting/js/nas/lib/yueting_napi.js></script>
+
+<script>
+        $("button#sign-up").on("click", function () {
+            window.location.href="/";
+        })
+        $("button#sign-in").on("click", function () {
+            window.location.href="/sign_in";
+        })
+</script>
 
 <!-- 站长统计代码 -->
 <span style="display: none">

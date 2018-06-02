@@ -127,7 +127,6 @@ $(function() {
             break;
             case "add":   //  添加
                 // ajax 请求数据
-                console.log("id is ")
                 var musicInfo = musicList[rem.dislist].item[num]
                 var userId = playerReaddata("userId")["userId"]
 

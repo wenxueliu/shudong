@@ -133,7 +133,6 @@ function query(args) {
     console.log("begin to call nas api")
     return innerCall(args, function (params) {
         var ret
-        console.dir(params)
         return neb.api
             .call({
 
@@ -151,7 +150,6 @@ function query(args) {
                     return resp
                 } else {
                     console.log("调用智能合约成功")
-                    console.log(resp)
                     return resp
                 }
             })
@@ -164,10 +162,8 @@ function query(args) {
 
 function onCallTest(args, callback) {
     //validateTab3() && innerCall(args, function (params) {
-    console.log("begin to call nas api")
     return innerCall(args, function (params) {
         var ret
-        console.dir(params)
         neb.api
             .call({
 
@@ -196,26 +192,22 @@ function onCallTest(args, callback) {
 
 function onCall(args, callback) {
 
-    console.dir(playerReaddata("account")["account"])
     //globalParams.account = playerReaddata("account")["account"]
     innerCall(args, function (params) {
         //chain
-        console.dir(globalParams.account)
-        console.dir(params)
         var gTx = new nebulas.Transaction(parseInt(chainId),
             globalParams.account,
             params.to, params.value, params.nonce, params.gasPrice, params.gasLimit, params.contract);
 
-        console.log("begin to sign transaction")
         gTx.signTransaction();
 
         neb.api
             .sendRawTransaction(gTx.toProtoString())
             .then(function (resp) {
-                console.log(JSON.stringify(resp));
+                JSON.stringify(resp);
             })
             .catch(function (err) {
-                console.log(JSON.stringify(err));
+                JSON.stringify(err);
             });
     });
 }
@@ -397,8 +389,6 @@ function innerCall(params, callback) {
     return neb.api.getAccountState(ret.from).then(function (resp) {
         var balance = nebulas.Unit.fromBasic(resp.balance, "nas");
         ret.nonce = parseInt(resp.nonce) + 1;
-        console.log("account state")
-        console.log(ret)
         return callback(ret);
     }).catch(function (err) {
         console.log("prepare nonce error: " + err);
