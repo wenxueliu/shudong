@@ -17,8 +17,8 @@ var isMobile = {
     }
 };
 
-$(function(){
-    if(mkPlayer.debug) {
+$(function() {
+    if (mkPlayer.debug) {
         console.warn('播放器调试模式已开启，正常使用时请在 js/player.js 中按说明关闭调试模式');
     }
     
@@ -29,7 +29,7 @@ $(function(){
     initAudio();    // 初始化 audio 标签，事件绑定
     
     
-    if(rem.isMobile) {  // 加了滚动条插件和没加滚动条插件所操作的对象是不一样的
+    if (rem.isMobile) {  // 加了滚动条插件和没加滚动条插件所操作的对象是不一样的
         rem.sheetList = $("#sheet");
         rem.mainList = $("#main-list");
     } else {
@@ -124,14 +124,39 @@ $(function(){
             case "share":   // 分享
                 // ajax 请求数据
                 ajaxUrl(musicList[rem.dislist].item[num], ajaxShare);
+            break;
             case "add":   //  添加
                 // ajax 请求数据
+                console.log("id is ")
+                var musicInfo = musicList[rem.dislist].item[num]
+                var userId = playerReaddata("userId")["userId"]
+
+                var add_music_callback = function(resp) {
+                    if (resp.execute_err == "") {
+                        ret = JSON.parse(resp.result)
+                    } else {
+                        conosole.log(resp.execute_err)
+                    }
+                }
+                addMusic(userId, musicInfo.id, musicInfo.name, "tencent", add_music_callback)
                 musicList[1].item.push(musicList[rem.dislist].item[num])
+                break;
             case "like":   //  点赞
-                var nas_num = likeit()
-                alert(" NAS 数量为 :" + nas_num.val())
-                // ajax 请求数据
-                //TODO
+                //var nas_num = likeit()
+                //alert(" NAS 数量为 :" + nas_num.val())
+
+                var musicInfo = musicList[rem.dislist].item[num]
+                var userId = playerReaddata("userId")["userId"]
+
+                var add_like_callback = function(resp) {
+                    if (resp.execute_err == "") {
+                        ret = JSON.parse(resp.result)
+                    } else {
+                        conosole.log(resp.execute_err)
+                    }
+                }
+                addLike(userId, musicInfo.id, musicInfo.name, "tencent", add_like_callback)
+                //TODO 增加点赞列表
             break;
         }
         return true;
@@ -265,8 +290,8 @@ $(function(){
     }
 
     // 图片加载失败处理
-    $('img').error(function(){
-        $(this).attr('src', 'images/player_cover.png');
+    $('img').on("error", function(){
+        $(this).attr('src', '/yueting/images/player_cover.png');
     });
 
     // 初始化播放列表
@@ -435,7 +460,7 @@ function changeCover(music) {
     }
 
     if(img == "err") {
-        img = "images/player_cover.png";
+        img = "/yueting/images/player_cover.png";
     } else {
         if(mkPlayer.mcoverbg === true && rem.isMobile)      // 移动端封面
         {
@@ -499,32 +524,42 @@ function loadList(list) {
     rem.mainList.html('');   // 清空列表中原有的元素
     addListhead();      // 向列表中加入列表头
 
-    if(musicList[list].item.length == 0) {
+    //if (musicList[list].item.length == 0) {
+    if (false) {
         addListbar("nodata");   // 列表中没有数据
     } else {
 
-        // 逐项添加数据
-        for(var i=0; i<musicList[list].item.length; i++) {
-            var tmpMusic = musicList[list].item[i];
-
-            addItem(i + 1, tmpMusic.name, tmpMusic.artist, tmpMusic.album);
-
-            // 音乐链接均有有效期限制,重新显示列表时清空处理
-            if(list == 1 || list == 2) tmpMusic.url = "";
-        }
-
-        // 列表加载完成后的处理
-        if(list == 1 || list == 2) {    // 历史记录和正在播放列表允许清空
-            addListbar("clear");    // 清空列表
-        }
-
-        if(rem.playlist === undefined) {    // 未曾播放过
-            if(mkPlayer.autoplay == true) pause();  // 设置了自动播放，则自动播放
+        var promise;
+        if (parseInt(list) == 1) {
+            promise = getUserMusicList()
+        } else if (parseInt(list) == 3) {
+            promise = getRandomMusics()
         } else {
-            refreshList();  // 刷新列表，添加正在播放样式
+            throw new Error("not support list")
         }
+        promise.then(function(musics) {
+            // 逐项添加数据
+            for(var i=0; i<musicList[list].item.length; i++) {
+                var tmpMusic = musicList[list].item[i];
 
-        listToTop();    // 播放列表滚动到顶部
+                addItem(i + 1, tmpMusic.name, tmpMusic.artist, tmpMusic.album);
+
+                // 音乐链接均有有效期限制,重新显示列表时清空处理
+                if (list == 1 || list == 2) tmpMusic.url = "";
+            }
+
+            // 列表加载完成后的处理
+            if (list == 1 || list == 2) {    // 历史记录和正在播放列表允许清空
+                addListbar("clear");    // 清空列表
+            }
+
+            if (rem.playlist === undefined) {    // 未曾播放过
+                if(mkPlayer.autoplay == true) pause();  // 设置了自动播放，则自动播放
+            } else {
+                refreshList();  // 刷新列表，添加正在播放样式
+            }
+            listToTop();    // 播放列表滚动到顶部
+        })
     }
 }
 
@@ -597,7 +632,7 @@ function addListbar(types) {
         break;
 
         case "nodata":  // 列表中没有内容
-            html = '<div class="list-item text-center" id="list-foot">可能是个假列表，什么也没有</div>';
+            html = '<div class="list-item text-center" id="list-foot">没有喜欢的歌曲，赶快去音乐广场看看</div>';
         break;
 
         case "clear":   // 清空列表
@@ -687,10 +722,12 @@ function refreshList() {
     }
 
 }
+
+
 // 添加一个歌单
 // 参数：编号、歌单名字、歌单封面
 function addSheet(no, name, cover) {
-    if(!cover) cover = "images/player_cover.png";
+    if(!cover) cover = "yueting/images/player_cover.png";
     if(!name) name = "读取中...";
 
     var html = '<div class="sheet-item" data-no="' + no + '">' +
@@ -699,10 +736,13 @@ function addSheet(no, name, cover) {
     '</div>';
     rem.sheetList.append(html);
 }
+
+
 // 清空歌单显示
 function clearSheet() {
     rem.sheetList.html('');
 }
+
 
 // 歌单列表底部登陆条
 function sheetBar() {
@@ -717,6 +757,7 @@ function sheetBar() {
     '</div></span>';
     rem.sheetList.append(barHtml);
 }
+
 
 // 选择要显示哪个数据区
 // 参数：要显示的数据区（list、sheet、player）
@@ -796,15 +837,17 @@ function initList() {
     addSheet(1, "2", "3");
 
     // 显示所有的歌单
-    for(var i=1; i<musicList.length; i++) {
+    for (var i=1; i<musicList.length; i++) {
 
-        if(i == 1) {    // 正在播放列表
+        if (i == 1) {    // 正在播放列表
             // 读取正在播放列表
-            var tmp_item = playerReaddata('playing');
-            if(tmp_item) {  // 读取到了正在播放列表
-                musicList[1].item = tmp_item;
-                mkPlayer.defaultlist = 1;   // 默认显示正在播放列表
-            }
+            getUserMusicList()
+            //var tmp_item = playerReaddata('playing');
+            //if(tmp_item) {  // 读取到了正在播放列表
+            //    musicList[1].item = tmp_item;
+            //    mkPlayer.defaultlist = 1;   // 默认显示正在播放列表
+            //}
+            mkPlayer.defaultlist = 1;   // 默认显示正在播放列表
 
         } else if(i == 2) { // 历史记录列表
             // 读取历史记录
@@ -894,7 +937,7 @@ function playerSavedata(key, data) {
     data = JSON.stringify(data);
     // 存储，IE6~7 不支持HTML5本地存储
     if (window.localStorage) {
-        localStorage.setItem(key, data);	
+        window.localStorage.setItem(key, data);
     }
 }
 
@@ -902,7 +945,13 @@ function playerSavedata(key, data) {
 function playerReaddata(key) {
     if(!window.localStorage) return '';
     key = 'YueTing_' + key;
-    return JSON.parse(localStorage.getItem(key));
+    return JSON.parse(window.localStorage.getItem(key));
+}
+
+function playerRemovedata(key) {
+    if(!window.localStorage) return '';
+    key = 'YueTing_' + key;
+    return window.localStorage.removeItem(key);
 }
 
 function likeit() {

@@ -91,15 +91,18 @@ public class TencentServiceImpl implements IMusicService {
             .header("Cookie", "pgv_pvi=22038528; pgv_si=s3156287488; pgv_pvid=5535248600; yplayer_open=1; ts_last=y.qq.com/portal/player.html; ts_uid=48     47550686; yq_index=0; qqmusic_fromtag=66; player_exist=1")
             .method(Connection.Method.GET)
             .ignoreContentType(true)
-            .timeout(5000)
+            .timeout(10000)
             .execute();
+            if (response == null) {
+                throw new IOException("read response error");
+            }
+            String body = response.body();
+            System.out.println("body" + body);
+            if (body !=  null) {
+                return convertToMusic(body);
+            }
         } catch (IOException e1) {
             e1.printStackTrace();
-        }
-        String body = response.body();
-        System.out.println("body" + body);
-        if (body !=  null) {
-            return convertToMusic(body);
         }
         return null;
     }
@@ -211,7 +214,7 @@ public class TencentServiceImpl implements IMusicService {
                     .header("Cookie", "pgv_pvi=22038528; pgv_si=s3156287488; pgv_pvid=5535248600; yplayer_open=1; ts_last=y.qq.com/portal/player.html; ts_uid=48     47550686; yq_index=0; qqmusic_fromtag=66; player_exist=1")
                     .method(Connection.Method.GET)
                     .ignoreContentType(true)
-                    .timeout(5000)
+                    .timeout(10000)
                     .execute();
         } catch (IOException e1) {
             e1.printStackTrace();

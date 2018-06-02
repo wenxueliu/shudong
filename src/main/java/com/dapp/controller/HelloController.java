@@ -21,10 +21,27 @@ import java.util.stream.Collectors;
  */
 @Controller
 public class HelloController {
-   @RequestMapping("/")
-   public String home() {
-       return "yueting/index";
-   }
+    @RequestMapping("/")
+    public String home() {
+        return "yueting/sign_up";
+    }
+
+    /*
+    @RequestMapping("/")
+    public String sign_up() {
+        return "yueting/sign_up";
+    }
+    */
+
+    @RequestMapping("/index")
+    public String index() {
+        return "yueting/index";
+    }
+
+    @RequestMapping("/sign_in")
+    public String sign_in() {
+        return "yueting/sign_in";
+    }
 
    /*
    @RequestMapping(value="postSearch", method= RequestMethod.POST)

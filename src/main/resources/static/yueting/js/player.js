@@ -2,7 +2,7 @@
 var mkPlayer = {
     // api: "api.php", // api地址
     //TODO 网站域名
-    api: "http://192.168.1.101:8080/api/", // api地址
+    api: "https://192.168.1.101:8443/api/", // api地址
     loadcount: 20,  // 搜索结果一次加载多少条
     method: "POST",     // 数据传输方式(POST/GET)
     defaultlist: 3,    // 默认要显示的播放列表编号
@@ -15,7 +15,6 @@ var mkPlayer = {
     version: "v0.01",    // 播放器当前版本号(仅供调试)
     debug: false// 是否开启调试模式(true/false)
 };
-
 
 // 存储全局变量
 //  rem.dislist  对应 musicList 的索引
@@ -35,7 +34,6 @@ var mkPlayer = {
 //  rem.lyric :
 //  rem.lastLyric
 var rem = [];
-
 
 // 音频错误处理函数
 function audioErr() {
@@ -76,6 +74,7 @@ function audioPlay() {
         $("#music-progress .mkpgb-dot").addClass("dot-move");   // 小点闪烁效果
     }
 
+    //TODO  fix music name
     var music = musicList[rem.playlist].item[rem.playid];   // 获取当前播放的歌曲信息
     document.title = music.name + " - " + music.artist + " | " + rem.webTitle;  // 改变浏览器标题
 }
@@ -323,7 +322,7 @@ mkpgb = function(bar, percent, callback){
 mkpgb.prototype = {
     // 进度条初始化
     init : function(){  
-        var mk = this,mdown = false;
+        var mk = this, mdown = false;
         // 加载进度条html元素
         $(mk.bar).html('<div class="mkpgb-bar"></div><div class="mkpgb-cur"></div><div class="mkpgb-dot"></div>');
         // 获取偏移量

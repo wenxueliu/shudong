@@ -32,7 +32,7 @@
     
     <!-- jQuery文件 -->
     <script src="/yueting/js/jquery.min.js"></script>
-    
+
     <!-- 播放器样式表文件 -->
     <link rel="stylesheet" type="text/css" href="/yueting/css/player.css">
     
@@ -45,12 +45,12 @@
     <!-- layer弹窗插件样式文件 -->
     <link rel="stylesheet" href="/yueting/plugns/layer/skin/default/layer.css?v=3.0.2302" id="layuicss-skinlayercss">
 
-    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.structure.css">
-    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.structure.min.css">
-    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.theme.css">
-    <link rel="stylesheet" type="text/css" href="/yueting/css/css/jquery-ui/jquery-ui.theme.min.css">
+    <link rel="stylesheet" type="text/css" href="/yueting/css/jquery-ui/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="/yueting/css/jquery-ui/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="/yueting/css/jquery-ui/jquery-ui.structure.css">
+    <link rel="stylesheet" type="text/css" href="/yueting/css/jquery-ui/jquery-ui.structure.min.css">
+    <link rel="stylesheet" type="text/css" href="/yueting/css/jquery-ui/jquery-ui.theme.css">
+    <link rel="stylesheet" type="text/css" href="/yueting/css/jquery-ui/jquery-ui.theme.min.css">
 </head>
 <body>
 
@@ -61,16 +61,18 @@
     <div class="logo" title="Powered by Wenxueliu">
         ♫ 越听
     </div>
+
+    <!--
+    <label for="name">名字</label>
+    <input type="text" placeholder="由数字字母下划线" name="name" id="name" class="text ui-widget-content ui-corner-all">
+    <label for="email">邮箱</label>
+    <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all">
+    -->
+    <!--
     <div id="sign-in-dialog-form" title="注册">
       <p class="validateTips">所有的表单字段都是必填的。</p>
       <form>
       <fieldset>
-        <label for="name">名字</label>
-        <input type="text" placeholder="由数字字母下划线" name="name" id="name" class="text ui-widget-content ui-corner-all">
-        <!--
-        <label for="email">邮箱</label>
-        <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all">
-        -->
         <label for="wallet">钱包地址</label>
         <input type="wallet" placeholder="数字或字母" name="wallet" id="wallet" value="" class="text ui-widget-content ui-corner-all">
       </fieldset>
@@ -96,11 +98,35 @@
       </fieldset>
       </form>
     </div>
-    
+    -->
+
+    <!--
+    <div class="container wallet">
+        <div id="newWallet">
+            <div class="form-group">
+                <label for="password" data-i18n="new/enter-password">输入密码:（不少于9位数）</label>
+                <input class="form-control" id="password" data-i18n="new/placeholder/do-not-forget" placeholder="别忘了这个！" data-validate-order-matters="required lengthGt8" type="password">
+            </div>
+            <button class="btn btn-block" data-i18n="new/new" id="creat">新建钱包</button>
+        </div>
+        <div class="active1 download">
+            <h1>
+                <span data-i18n="new/save1">保存你的</span>
+                <code data-i18n="keystore-file">密码库文件</code>
+                <span data-i18n="new/save3">。</span>
+            </h1>
+            <button class="btn btn-block" data-i18n="new/gen">下载密码库文件</button>
+        </div>
+        <p class="wallet_help" data-i18n="new/comment">该密码用于加密您的私钥。
+            他不做为产生私钥的种子。
+            您需要该密码 + 您的私钥以解锁您的钱包。</p>
+    </div>
+
+    <textarea id='t1'></textarea>
     <button class="login-btn" id="sign-in"> 注册</button>
     <button class="login-btn" id="sign-up"> 登录</button>
     <!--<button class="btn-box" id="like">  点赞 </button> -->
-    </div>  <!--class="header"-->
+</div>  <!--class="header"-->
 
 <!-- 中间主体区域 -->
 <div class="center">
@@ -115,6 +141,11 @@
                 <span class="btn" data-action="sheet" title="音乐广场">音乐广场</span>
                 <input class="btn" type="text" id="search_value" placeholder="试一试手气"/>
                 <span class="btn" data-action="search" title="点击搜索音乐">搜索</span>
+
+                <div class="login-regist">
+                    <button class="btn login-btn" style="background-color:#e0d2d269;" id="sign-in"> 注册</button>
+                    <button class="btn login-btn" style="background-color:#9e98ab;" id="sign-up"> 登录</button>
+                </div>
             </div>
         </div>  <!--class="btn-bar"-->
         
@@ -132,7 +163,7 @@
         <div class="player" id="player">
             <!--歌曲封面-->
             <div class="cover">
-                <img src="/yueting/images/player_cover.png" class="music-cover" id="music-cover">
+                <img src="/yueting/images/player_cover.png" onerror="this.src ='/yueting/images/player_cover.png'" class="music-cover" id="music-cover">
             </div>
             <!--滚动歌词-->
             <div class="lyric">
@@ -171,6 +202,25 @@
     </div>  <!--class="container"-->
 </div>  <!--class="footer"-->
 
+<script>
+
+
+    window.onload = function() {
+        //alert("  正在加载。。。。")
+        if (playerReaddata("userId") == null) {
+            window.location.href="/";
+        } else {
+            var userId = playerReaddata("userId")["userId"]
+            console.log("userId == ", userId)
+        }
+    }
+
+    //window.onbeforeunload = function() {
+    //    alert(" 即将关闭 。。。。")
+    //    playerRemovedata("userId")
+    //}
+
+</script>
 <!-- layer弹窗插件 -->
 <script src="/yueting/plugns/layer/layer.js"></script>
 
@@ -189,18 +239,34 @@
 <!-- 播放器主体功能模块 -->
 <script src="/yueting/js/player.js"></script>
 
+
 <!-- 滚动条美化插件 -->
 <script src="/yueting/js/jquery.mCustomScrollbar.concat.min.js"></script>
 
 <!-- 背景模糊化插件 -->
 <script src="/yueting/js/background-blur.min.js"></script>
 
-<!--<script charset="UTF-8" src="/yueting/js/jquery/jquery.js" ></script> -->
+
+<!--<script charset="UTF-8" src="/yueting/js/jquery/jquery.js" ></script>
 <script charset="UTF-8" src="/yueting/js/jquery-ui/jquery-ui.js" ></script>
 <script charset="UTF-8" src="/yueting/js/jquery-ui/jquery-ui.min.js" ></script>
 <script charset="UTF-8" src="/yueting/js/sign-in.js"></script>
 <script charset="UTF-8" src="/yueting/js/sign-up.js"></script>
 <script charset="UTF-8" src="/yueting/js/like.js"></script>
+-->
+
+<!--
+<script src=yueting/js/nas/lib/jquery-3.3.1.min.js></script>
+-->
+<script src=yueting/js/nas/lib/bootstrap-4.0.0-dist/js/bootstrap.bundle.min.js data-depends=jquery.slim></script>
+<script src=yueting/js/nas/lib/bootbox.min.js data-depends="bootstrap jquery.slim"></script>
+<script src=yueting/js/nas/lib/blockies.min.js></script>
+<script src=yueting/js/nas/lib/nebulas.js></script>
+<script src=yueting/js/nas/js/1-localSave.js></script>
+<script src=yueting/js/nas/js/home.v1.js></script>
+<script src=yueting/js/nas/js/i18n.js data-depends=jquery.slim></script>
+<script src=yueting/js/nas/js/ui-block.js data-depends="bootbox blockies jquery.slim i18n.js nebulas.js"></script>
+<script src=yueting/js/nas/lib/yueting_napi.js></script>
 
 <!-- 站长统计代码 -->
 <span style="display: none">

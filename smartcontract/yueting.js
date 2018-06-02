@@ -50,7 +50,7 @@ YueTing.prototype = {
 
     checkProfile: function(profile) {
         if (typeof(profile) == "undefined") {
-            throw new Error("userId cannot be empty")
+            throw new Error("profile cannot be empty")
         }
         var newUser = new User(profile)
         var userId = newUser.userId
@@ -101,6 +101,7 @@ YueTing.prototype = {
         console.debug("addUser userId:", userId, " profile:", profile)
         userId = this.assertNotExist(userId)
         var newUser = this.checkProfile(profile)
+        // TODO check the newUser.userId match to userId
         var num = LocalContractStorage.get("users_num");
         num += 1
         if (num > 1000000) {
@@ -169,7 +170,7 @@ YueTing.prototype = {
         }
         var userId = this.usersIndexs.get(number - 1);
         var info = this.users.get(userId)
-        result += "{ index: " + i + ", userId: " + userId + ", info: " + info + "}]"
+        result += info + "]"
         return result
     },
 

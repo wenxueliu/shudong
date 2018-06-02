@@ -14,14 +14,14 @@ function ajaxSearch() {
     }
 
     $.ajax({
-        type:"GET", //mkPlayer.method,
-        url: mkPlayer.api+"search/"+rem.wd,//+"?count=" + mkPlayer.loadcount + "&provider=" + rem.source + "&pages=" + rem.loadPage,
+        type:"GET",
+        url: mkPlayer.api+"search/"+rem.wd,
         dataType : "json",
         complete: function(XMLHttpRequest, textStatus) {
             if(tmpLoading) layer.close(tmpLoading);    // 关闭加载中动画
-        },  // complete
+        },
         success: function(jsonData){
-            
+
             // 调试信息输出
             if(mkPlayer.debug) {
                 console.debug("搜索结果数：" + jsonData.length);
@@ -380,4 +380,135 @@ function ajaxUserList(uid)
         }   // error
     });//ajax
     return true;
+}
+
+
+// 完善获取音乐信息
+// 音乐所在列表ID、音乐对应ID、回调函数
+function ajaxMusicInfo(musicId)
+{
+    var promise = new Promise(function(resolve, reject) {
+            var XHR = new XMLHttpRequest();
+            XHR.open("GET", mkPlayer.api + "musics/" + musicId, true);
+            XHR.setRequestHeader("Content-Type","application/json;");
+            XHR.onreadystatechange = function () {
+                if (this.readyState !==4) {
+                    return;
+                }
+                if (this.status == 200) {
+                    resolve(this.response);
+                } else {
+                    reject(new Error(this.statusText) );
+                }
+            };
+            XHR.responseType = "json";
+            XHR.setRequestHeader("Accept","application/json");
+            XHR.send();
+        });
+    return promise;
+}
+
+function response_convert_json(jsonData) {
+    if (jsonData == null) {
+        throw new Error("jsonData is null")
+    }
+    var tempItem =  {
+        id: jsonData.id,  // 音乐ID
+        name: jsonData.title, // 音乐名字
+        duration: jsonData.duration,
+        album:  jsonData.albumName, // 专辑名字
+        artist: jsonData.singer,  // 艺术家名字
+        pic: jsonData.pictureURL,
+        url: jsonData.streamURL,
+        url_id: jsonData.id,  // 链接ID
+        pic_id: jsonData.pictureId // 封面ID
+    };
+
+    return tempItem
+}
+
+function getUserMusicList() {
+
+    console.log("加载我的音乐列表")
+    var userId = playerReaddata("userId")["userId"]
+    return getMusic(userId).then(function(musics) {
+        var mids = []
+        for (mid in musics) {
+            mids.push(mid)
+        }
+        return mids
+    }).then(function(musicIds) {
+        var musics = musicIds.map(function(mid) { return ajaxMusicInfo(mid) })
+        return Promise.all(musics)
+    }).then(function(musics) {
+        var items = []
+        for (m in musics) {
+            if (musics[m] == null) {
+                continue
+            }
+            items.push(response_convert_json(musics[m]))
+        }
+        musicList[1].item = items
+        //playerSavedata("playing", items)
+        return items
+    }).catch(
+        err => { console.log("getUserMusicList :", err)
+    })
+}
+
+function getRandomIntInclusive(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
+}
+
+function getRandomMusics() {
+
+    return userSize().then(function(resp) {
+        var size = parseInt(resp["result"])
+        return size
+    }).then(function(size) {
+        if (size > 5) {
+            offset = getRandomIntInclusive(0, userSize - 5)
+            return allUsers(offset + 5, offset)
+        } else {
+            return allUsers(5, 0)
+        }
+    }).then(function (users) {
+        var uIds = []
+        users = JSON.parse(JSON.parse(users["result"]))
+        for (var u = 0; u < users.length; u++) {
+            var uid = users[u]["userId"]
+            uIds.push(uid)
+        }
+        return uIds
+    }).then(function(uIds) {
+        var promises = uIds.map(function(uid) {
+            return getMusic(uid)
+        })
+        return Promise.all(promises)
+    }).then(function(musics) {
+        var mids = []
+        for (m in musics) {
+            for (id in musics[m]) {
+                mids.push(id)
+            }
+        }
+        var musics = mids.map(function(mid) { return ajaxMusicInfo(mid) })
+        return Promise.all(musics)
+    }).then(function(musics) {
+        var items = []
+        for (m in musics) {
+            if (musics[m] == null) {
+                continue
+            }
+            items.push(response_convert_json(musics[m]))
+        }
+        musicList[3].item = items
+        //playerSavedata("sheet", items)
+        return items
+    }).catch(function(error) {
+        console.log(error)
+    })
+
 }

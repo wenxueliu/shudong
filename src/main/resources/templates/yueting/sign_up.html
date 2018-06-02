@@ -1,0 +1,77 @@
+
+<!doctype html>
+<html>
+
+<head>
+    <meta charset=utf-8>
+    <link rel="icon shortcut" href=yueting/img/logo.png type=image/png>
+    <link rel=apple-touch-icon href=yueting/img/logo.png>
+    <link rel=stylesheet href=yueting/js/nas/lib/bootstrap-4.0.0-dist/css/bootstrap.min.css>
+    <link rel=stylesheet href=yueting/js/nas/lib/prismjs-1.13.0/prism.css>
+    <link rel=stylesheet href=yueting/css/nas/css/base.css>
+    <link rel=stylesheet href=yueting/css/nas/css/ui-block.css>
+    <link rel=stylesheet href=yueting/css/nas/css/codemirror.css>
+    <meta name=viewport content="width=device-width">
+    <title>登录</title>
+</head>
+
+
+<body>
+    <div class="login_root">
+        <div>
+    <div class = "header_nav">
+        <button class="btn left active" id = "sign_up" data-i18n="swf/sign_up"> 登录 </button>
+        <button class="btn right" id = "sign_in" data-i18n="swf/sign_in"> 注册 </button>
+    </div>
+
+    <div class="select-wallet-file">
+        <!--<p data-i18n="swf/name">选择你的钱包文件：</p>-->
+        <label class="file empty">
+            <span data-i18n="swf/button">选择钱包文件...</span>
+            <input type="file">
+        </label>
+        <label class="hide pass">
+            <span data-i18n="swf/good">你的钱包加密了，好！请输入密码。</span>
+            <input type="password">
+        </label>
+        <button class="btn btn-block" data-i18n="swf/sign_up"> 登录</button>
+        <!--
+        <button class="btn btn-block" data-i18n="swf/unlock"> 登录</button>
+        -->
+    </div>
+
+    <div class="fade loading modal" data-backdrop=static>
+        <div class=modal-dialog>
+            <div class=modal-content>
+                <div class=modal-body>
+                    <div class=progress>
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role=progressbar style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <script src=yueting/js/nas/lib/jquery-3.3.1.min.js></script>
+    <script src=yueting/js/nas/lib/bootstrap-4.0.0-dist/js/bootstrap.bundle.min.js data-depends=jquery.slim></script>
+    <script src=yueting/js/nas/lib/bootbox.min.js data-depends="bootstrap jquery.slim"></script>
+    <script src=yueting/js/nas/lib/blockies.min.js></script>
+    <script src=yueting/js/nas/lib/js-beautify-1.7.5/beautify.js></script>
+    <script src=yueting/js/nas/lib/prismjs-1.13.0/prism.js></script>
+    <script src=yueting/js/nas/lib/nebulas.js></script>
+    <script src=yueting/js/nas/js/1-localSave.js></script>
+    <script src=yueting/js/nas/js/home.v1.js></script>
+    <script src=yueting/js/nas/js/i18n.js data-depends=jquery.slim></script>
+    <script src=yueting/js/nas/js/ui-block.js data-depends="bootbox blockies jquery.slim i18n.js nebulas.js"></script>
+    <script src=yueting/js/nas/lib/codemirror/codemirror.js></script>
+    <script src=yueting/js/nas/lib/codemirror/javascript.js></script>
+    <script src=yueting/js/nas/lib/yueting_napi.js></script>
+    <script>
+        $("button#sign_in").on("click", function () {
+            window.location.href="/sign_in";
+        })
+    </script>
+
+</body>
+</html>

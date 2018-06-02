@@ -203,6 +203,10 @@ body {
     display: none;
 }
 
+.login-regist{
+    float:right;
+}
+
 #search_value{
     background: transparent;
 }
@@ -495,10 +499,11 @@ body {
     background-color: rgba(0, 0, 0, 0.12);
 }
 .login-btn {
+    opacity: 0.8;
     cursor: pointer;
 }
 .login-btn:hover {
-    color: #31c27c;
+    color: white        ;
 }
 
 /* 以下是界面右侧 css 样式 */
