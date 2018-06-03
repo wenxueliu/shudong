@@ -203,8 +203,6 @@
 </div>  <!--class="footer"-->
 
 <script>
-
-
     window.onload = function() {
         //alert("  正在加载。。。。")
         if (playerReaddata("userId") == null) {
@@ -274,6 +272,13 @@
         $("button#sign-in").on("click", function () {
             window.location.href="/sign_in";
         })
+
+        document.onkeydown = function(event) {
+            var e = event || window.event || arguments.callee.caller.arguments[0];
+            if (e && e.keyCode==13) {
+               searchSubmit()
+            }
+        }
 </script>
 
 <!-- 站长统计代码 -->

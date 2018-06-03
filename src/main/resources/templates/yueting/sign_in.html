@@ -37,7 +37,7 @@
         </div>
         <div id=newWallet class="newWallet">
             <div class=form-group>
-                <label for=password data-i18n=>Enter a password:（Not less than 9 characters）</label>
+                <!--<label for=password data-i18n="Enter a password:（Not less than 9 characters)"> &bsp</label> -->
                 <input type=password class=form-control id=password data-i18n=new/enter-password placeholder="Do NOT forget to save this!" data-validate-order-matters="required lengthGt8">
             </div>
             <button class="btn btn-block" data-i18n=new/new id=creat>Create New Wallet</button>
@@ -112,6 +112,28 @@
         $("button#sign_up").on("click", function () {
             window.location.href="/";
         })
+    </script>
+    <script>
+        var isMobile = {
+            Android: function() {
+                return navigator.userAgent.match(/Android/i) ? true : false;
+            },
+            BlackBerry: function() {
+                return navigator.userAgent.match(/BlackBerry/i) ? true : false;
+            },
+            iOS: function() {
+                return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
+            },
+            Windows: function() {
+                return navigator.userAgent.match(/IEMobile/i) ? true : false;
+            },
+            any: function() {
+                return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
+            }
+        };
+        if (isMobile.Android() || isMobile.iOS()) {
+            $(".wallet").css("width", "83%");
+        }
     </script>
 </body>
 </html>

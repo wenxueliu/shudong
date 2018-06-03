@@ -5,6 +5,7 @@
     */
 
 body {
+    background: #e0d8dd;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -210,7 +211,7 @@ body {
     padding:6px;
     font-size:1.5em;
     background:transparent;
-    color:#5b49538f;
+    color:#5b4953;
 }
 
 .header_nav .right{
@@ -219,7 +220,7 @@ body {
     font-size:1.5em;
     background:transparent;
     margin-left:26%;
-    color:#5b49538f;
+    color:#5b4953;
 }
 
 .header_nav .active{
@@ -238,4 +239,8 @@ body {
 
 .wallet:first-child{
     height:310px;
+}
+
+.newWallet {
+    margin-top: 10%
 }

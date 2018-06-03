@@ -135,7 +135,6 @@ function query(args) {
         var ret
         return neb.api
             .call({
-
                 from: params.from,
                 to: params.to,
                 value: params.value,
@@ -146,7 +145,7 @@ function query(args) {
             })
             .then(function (resp) {
                 if (resp.execute_err && resp.execute_err !== "") {
-                    console.log("调用智能合约失败")
+                    console.log("调用智能合约失败; 请确保你的钱包余额")
                     return resp
                 } else {
                     console.log("调用智能合约成功")
@@ -177,7 +176,14 @@ function onCallTest(args, callback) {
             })
             .then(function (resp) {
                 if (resp.execute_err && resp.execute_err !== "") {
-                    console.log("调用智能合约失败")
+                    console.log("调用智能合约失败; 请确保你的钱包余额")
+                    bootbox.dialog({
+                        backdrop: true,
+                        onEscape: true,
+                        message: "调用智能合约失败; 请确保你的钱包余额",
+                        size: "large",
+                        title: "Error"
+                    });
                     return callback(resp)
                 } else {
                     console.log("调用智能合约成功")
@@ -186,6 +192,13 @@ function onCallTest(args, callback) {
             })
             .catch(function (err) {
                 console.log("调用智能合约失败 " + JSON.stringify(err))
+                bootbox.dialog({
+                    backdrop: true,
+                    onEscape: true,
+                    message: "调用智能合约失败; 请确保你的钱包余额",
+                    size: "large",
+                    title: "Error"
+                });
             });
     });
 }
@@ -333,6 +346,13 @@ function innerCall(params, callback) {
     // prepare to
     if (!Account.isValidAddress(params.to)) {
         console.log("目的地址不合法")
+        bootbox.dialog({
+            backdrop: true,
+            onEscape: true,
+            message: "目的地址不合法",
+            size: "large",
+            title: "Error"
+        });
         return;
     }
 
