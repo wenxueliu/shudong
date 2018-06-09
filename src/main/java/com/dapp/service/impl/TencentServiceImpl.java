@@ -52,6 +52,7 @@ public class TencentServiceImpl implements IMusicService {
 
         JSONObject album = data.getJSONObject("album");
         String albumMid = album.getString("mid");
+        String albumName = album.getString("name");
 
         String pictureId = albumMid;
 
@@ -65,6 +66,7 @@ public class TencentServiceImpl implements IMusicService {
         music.setMediaMid(mediaMid);
         music.setSongMid(songMid);
         music.setPictureId(pictureId);
+        music.setAlbumName(albumName);
         music.setPictureURL(pictureIdToURL(pictureId));
         String streamURL = getStreamURL(songMid, mediaMid);
         music.setStreamURL(streamURL);
