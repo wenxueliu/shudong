@@ -478,6 +478,9 @@ function getRandomMusics() {
         var uIds = []
         users = JSON.parse(JSON.parse(users["result"]))
         for (var u = 0; u < users.length; u++) {
+            if (users[u] == null) {
+                continue
+            }
             var uid = users[u]["userId"]
             uIds.push(uid)
         }
