@@ -233,7 +233,7 @@ public class TencentServiceImpl implements IMusicService {
             JSONObject item = items.getJSONObject(0);
             String fileName = item.getString("filename");
             String vKey = item.getString("vkey");
-            String streamURL = new StringBuilder(100).append("http://dl.stream.qqmusic.qq.com/")
+            String streamURL = new StringBuilder(100).append("https://dl.stream.qqmusic.qq.com/")
                     .append(fileName).append("?vkey=").append(vKey)
                     .append("&guid=6612300644&uin=0&fromtag=66")
                     .toString();

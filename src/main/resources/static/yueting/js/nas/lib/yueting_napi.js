@@ -534,6 +534,9 @@ function getMusic(userId) {
         call_args : "[\"" + userId + "\"]"
     }
     return query(args).then(function(resp) {
+        if (resp == undefined) {
+            throw new Error("getMusic: time out");
+        }
         if (resp.execute_err == "") {
             var ret = JSON.parse(resp["result"])
             return ret

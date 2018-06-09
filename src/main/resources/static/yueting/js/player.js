@@ -40,8 +40,10 @@ function audioErr() {
     // 没播放过，直接跳过
     if(rem.playlist === undefined) return true;
 
-    layer.msg('当前歌曲播放失败，自动播放下一首');
-    nextMusic();    // 切换下一首歌
+    layer.msg('当前歌曲播放失败');
+    if (id < musicList[1].item.length) {
+        nextMusic();    // 切换下一首歌
+    }
 }
 
 // 点击暂停按钮的事件
