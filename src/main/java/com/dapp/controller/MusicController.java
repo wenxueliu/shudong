@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.net.URI;
 import java.util.List;
 
-/**
- * Created by liuwenxue on 17/05/2018.
+/** * Created by liuwenxue on 17/05/2018.
  */
 @RestController
 @RequestMapping("/api/musics")
@@ -35,16 +34,11 @@ public class MusicController {
     //}
 
     @RequestMapping(value = "/{musicId}", method = RequestMethod.GET)
-    public Music getMusicById(@NonNull @PathVariable String musicId, @NonNull @RequestParam(value = "provider", defaultValue = "tencent", required = false) String provider, HttpServletResponse response) {
-    //public ResponseEntity<Music> getMusicById(@NonNull @PathVariable String musicId, @NonNull @RequestParam(value = "provider", defaultValue = "tencent", required = false) String provider, HttpServletResponse response) {
-        return musicService.getMusicById(provider, musicId);
-        /*
+    public ResponseEntity<Music> getMusicById(@NonNull @PathVariable String musicId, @NonNull @RequestParam(value = "provider", defaultValue = "tencent", required = false) String provider, HttpServletResponse response) {
         final RestTemplate restTemplate = new RestTemplateBuilder().build();
         String newUrl = "https://39.107.238.130:443/api/musics/" + musicId + "?provider=netease";
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(newUrl));
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
-        */
-
     }
 }
