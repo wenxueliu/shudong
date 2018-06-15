@@ -2,7 +2,7 @@
 var mkPlayer = {
     // api: "api.php", // api地址
     //TODO 网站域名
-    api: "https://192.168.1.101:8443/api/", // api地址
+    api: "https://www.yueting.online/api/", // api地址
     loadcount: 20,  // 搜索结果一次加载多少条
     method: "POST",     // 数据传输方式(POST/GET)
     defaultlist: 3,    // 默认要显示的播放列表编号
