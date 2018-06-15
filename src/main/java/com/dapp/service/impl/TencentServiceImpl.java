@@ -71,6 +71,8 @@ public class TencentServiceImpl implements IMusicService {
         String streamURL = getStreamURL(songMid, mediaMid);
         music.setStreamURL(streamURL);
 
+        music.setLyric(getLyric(id, songMid));
+
         return music;
     }
 
@@ -242,5 +244,45 @@ public class TencentServiceImpl implements IMusicService {
             return streamURL;
         }
         return null;
+    }
+
+    private String getLyric(String musicId, String mediaMid) {
+        System.out.println(musicId + "--- " +  mediaMid);
+        String url = new StringBuilder(200)
+                .append("https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric.fcg?nobase64=1&musicid=")
+                .append(musicId).append("&callback=jsonp1&g_tk=5381&jsonpCallback=jsonp1&loginUin=0&hostUin=0&format=jsonp&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0").toString();
+        Connection.Response response = null;
+        try {
+            response = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
+                    .header("Accept", "*/*")
+                    //.header("Cache-Control", "no-cache")
+                    //.header("Connection", "keep-alive")
+                    .header("Referer", new StringBuilder().append("https://y.qq.com/n/yqq/song/").append(mediaMid).append(".html").toString())
+                    //.header("Accept-Language", "zh-CN,en-US;q=0.7,en;q=0.3")
+                    //.header("Pragma", "no-cache")
+                    .method(Connection.Method.GET)
+                    .ignoreContentType(true)
+                    .timeout(10000)
+                    .execute();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            return null;
+        }
+        String body = response.body();
+        logger.debug("lyric body {}", body);
+        if (body !=  null) {
+            body = body.substring(7, body.length() - 1);
+            JSONObject jsonBody = JSON.parseObject(body);
+            String data = jsonBody.getString("lyric");
+            logger.debug("lyric body {}", data);
+            data = data.replaceAll("&#32;", " ");
+            data = data.replaceAll("&#58", "");
+            data = data.replaceAll("&#46", "");
+            //data.replace("&#//d+", "");
+            return data;
+        }
+        return null;
+
     }
 }

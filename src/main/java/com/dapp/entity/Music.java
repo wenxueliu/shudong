@@ -18,6 +18,7 @@ public final class Music {
     private String songMid;
     private String mediaMid;
     private String provider;
+    private String lyric;
 
     //@Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
 
@@ -145,6 +146,15 @@ public final class Music {
 
     public Music setStreamURL(String streamURL) {
         this.streamURL = streamURL;
+        return this;
+    }
+
+    public String getLyric() {
+        return lyric;
+    }
+
+    public Music setLyric(String lyric) {
+        this.lyric = lyric;
         return this;
     }
 

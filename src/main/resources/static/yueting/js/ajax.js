@@ -60,7 +60,8 @@ function ajaxSearch() {
                     pic: jsonData[i].pictureURL,
                     url: jsonData[i].streamURL,
                     url_id: jsonData[i].id,  // 链接ID
-                    pic_id: jsonData[i].pictureId // 封面ID
+                    pic_id: jsonData[i].pictureId, // 封面ID
+                    lyric_id: jsonData[i].id  // 歌词ID
                     //name: jsonData[i].name,
                     //artist: jsonData[i].artist[0],
                     //album: jsonData[i].album,
@@ -288,19 +289,23 @@ function ajaxPlayList(lid, id, callback){
 // 参数：音乐ID，回调函数
 function ajaxLyric(music, callback) {
     lyricTip('歌词加载中...');
-    
-    if(!music.lyric_id) callback('');  // 没有歌词ID，直接返回
+
+    if (typeof(music.lyric_id) == undefined) {
+        console.log("come here")
+        callback('');  // 没有歌词ID，直接返回
+    }
     
     $.ajax({
-        type: GET,
-        url: mkPlayer.api,
+        type: 'GET',
+        url: mkPlayer.api + "musics/" + music.id,
         dataType : "json",
         success: function(jsonData){
             // 调试信息输出
             if (mkPlayer.debug) {
                 console.debug("歌词获取成功");
             }
-            
+
+            //console.dir(jsonData.lyric)
             if (jsonData.lyric) {
                 callback(jsonData.lyric, music.lyric_id);    // 回调函数
             } else {
@@ -421,7 +426,8 @@ function response_convert_json(jsonData) {
         pic: jsonData.pictureURL,
         url: jsonData.streamURL,
         url_id: jsonData.id,  // 链接ID
-        pic_id: jsonData.pictureId // 封面ID
+        pic_id: jsonData.pictureId, // 封面ID
+        lyric_id: jsonData.id
     };
 
     return tempItem

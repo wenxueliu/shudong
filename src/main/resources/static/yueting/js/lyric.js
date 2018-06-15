@@ -10,10 +10,14 @@ function lyricTip(str) {
 // 歌曲加载完后的回调函数
 // 参数：歌词源文件
 function lyricCallback(str, id) {
-    if(id !== musicList[rem.playlist].item[rem.playid].id) return;  // 返回的歌词不是当前这首歌的，跳过
-    
+    console.log("lyric of " + id + " is not match music" + musicList[rem.playlist].item[rem.playid].id + " , skip")
+    if (id !== musicList[rem.playlist].item[rem.playid].id) {
+        console.log("lyric of " + id + " is not match music" + musicList[rem.playlist].item[rem.playid].id + " , skip")
+        return;  // 返回的歌词不是当前这首歌的，跳过
+    }
+
     rem.lyric = parseLyric(str);    // 解析获取到的歌词
-    
+
     if(rem.lyric === '') {
         lyricTip('没有歌词');
         return false;
@@ -76,25 +80,26 @@ function scrollLyric(time) {
 }
 
 // 解析歌词
-// 这一函数来自 https://github.com/TivonJJ/html5-music-player
-// 参数：原始歌词文件
 function parseLyric(lrc) {
     if(lrc === '') return '';
-    var lyrics = lrc.split("\n");
+    var lyrics = lrc.split("&#10;");
     var lrcObj = {};
-    for(var i=0;i<lyrics.length;i++){
+    for (var i=0;i<lyrics.length;i++){
         var lyric = decodeURIComponent(lyrics[i]);
-        var timeReg = /\[\d*:\d*((\.|\:)\d*)*\]/g;
+        var timeReg = /\[\d*((\;)\d*)*\]/g;
         var timeRegExpArr = lyric.match(timeReg);
-        if(!timeRegExpArr)continue;
-        var clause = lyric.replace(timeReg,'');
-        for(var k = 0,h = timeRegExpArr.length;k < h;k++) {
-            var t = timeRegExpArr[k];
-            var min = Number(String(t.match(/\[\d*/i)).slice(1)),
-                sec = Number(String(t.match(/\:\d*/i)).slice(1));
-            var time = min * 60 + sec;
-            lrcObj[time] = clause;
+        if (!timeRegExpArr) {
+            continue;
         }
+
+        var clause = lyric.replace(timeReg,'');
+        clause = clause.replace("apos", '\'')
+        clause = clause.replace("&#38;", '')
+        clause = clause.replace("&#59;", '')
+        var min = Number(String(timeRegExpArr[0].substr(1, 2)))
+        var sec = Number(String(timeRegExpArr[0].substr(4, 2)))
+        var time = min * 60 + sec;
+        lrcObj[time] = clause;
     }
     return lrcObj;
 }

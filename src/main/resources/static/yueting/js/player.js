@@ -269,7 +269,7 @@ function play(music) {
 
     music_bar.goto(0);  // 进度条强制归零
     changeCover(music);    // 更新封面展示
-    // ajaxLyric(music, lyricCallback);     // ajax加载歌词 TODO API接口开发完成后再放开
+    ajaxLyric(music, lyricCallback);     // ajax加载歌词 TODO API接口开发完成后再放开
     music_bar.lock(false);  // 取消进度条锁定
 }
 
